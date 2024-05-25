@@ -6,6 +6,9 @@ import (
 
 func main() {
 	lbConfig := lb.DefaultLBConfig()
-	lbServer := lb.NewLoadBalancer(lbConfig)
+	addresses := []string{
+		":8000", ":8001", ":8002",
+	}
+	lbServer := lb.NewLoadBalancer(lbConfig, addresses)
 	lbServer.Start()
 }

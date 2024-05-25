@@ -7,12 +7,16 @@ import (
 )
 
 type LoadBalancer struct {
-	Config *LBConfig
+	Config    *LBConfig
+	Addresses []string
+	selector  *Selector
 }
 
-func NewLoadBalancer(config *LBConfig) *LoadBalancer {
+func NewLoadBalancer(config *LBConfig, addresses []string) *LoadBalancer {
 	return &LoadBalancer{
-		Config: config,
+		Config:    config,
+		Addresses: addresses,
+		selector:  NewSelector(),
 	}
 }
 
@@ -66,7 +70,10 @@ func (s *LoadBalancer) handleConnection(conn net.Conn) {
 }
 
 func (s *LoadBalancer) routeRequest(data []byte) ([]byte, error) {
-	conn, err := net.Dial("tcp", ":8000")
+	serverAddress := s.selectServer()
+	log.Printf("Forwarding request to: %s", serverAddress)
+
+	conn, err := net.Dial("tcp", serverAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -94,4 +101,9 @@ func (s *LoadBalancer) routeRequest(data []byte) ([]byte, error) {
 		}
 	}
 	return response, nil
+}
+
+func (s *LoadBalancer) selectServer() string {
+	idx := s.selector.Next() % uint64(len(s.Addresses))
+	return s.Addresses[idx]
 }
