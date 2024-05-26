@@ -1,6 +1,7 @@
 package lb
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -21,7 +22,7 @@ func NewLoadBalancer(config *LBConfig) *LoadBalancer {
 }
 
 func (s *LoadBalancer) Start() {
-	ln, err := net.Listen("tcp", s.Config.Address)
+	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Config.Port))
 	if err != nil {
 		log.Panicf("Could not start server: %+v", err)
 	}
