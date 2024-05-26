@@ -21,9 +21,7 @@ func DefaultLBConfig() *LBConfig {
 		BufferSize:          1024, // bytes
 		HealthCheckInterval: 10,   // seconds
 		HealthCheckRoute:    "/health",
-		Servers: []string{
-			"127.0.0.1:8000", "127.0.0.1:8001", "127.0.0.1:8002",
-		},
+		Servers:             []string{},
 	}
 }
 
