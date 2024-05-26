@@ -7,7 +7,7 @@ import (
 func main() {
 	lbConfig := lb.DefaultLBConfig()
 	addresses := []string{
-		":8000", ":8001", ":8002",
+		"127.0.0.1:8000", "127.0.0.1:8001", "127.0.0.1:8002",
 	}
 	lbServer := lb.NewLoadBalancer(lbConfig, addresses)
 	lbServer.Start()

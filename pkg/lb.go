@@ -7,16 +7,16 @@ import (
 )
 
 type LoadBalancer struct {
-	Config    *LBConfig
-	Addresses []string
-	selector  *Selector
+	Config        *LBConfig
+	healthChecker *HealthChecker
+	selector      *Selector
 }
 
 func NewLoadBalancer(config *LBConfig, addresses []string) *LoadBalancer {
 	return &LoadBalancer{
-		Config:    config,
-		Addresses: addresses,
-		selector:  NewSelector(),
+		Config:        config,
+		selector:      NewSelector(),
+		healthChecker: NewHealthChecker(addresses, config.HealthCheckRoute, config.HealthCheckInterval),
 	}
 }
 
@@ -25,6 +25,8 @@ func (s *LoadBalancer) Start() {
 	if err != nil {
 		log.Panicf("Could not start server: %+v", err)
 	}
+
+	s.healthChecker.Run()
 
 	for {
 		conn, err := ln.Accept()
@@ -104,6 +106,7 @@ func (s *LoadBalancer) routeRequest(data []byte) ([]byte, error) {
 }
 
 func (s *LoadBalancer) selectServer() string {
-	idx := s.selector.Next() % uint64(len(s.Addresses))
-	return s.Addresses[idx]
+	servers := s.healthChecker.GetHealthyServers()
+	idx := s.selector.Next() % uint64(len(servers))
+	return servers[idx]
 }
