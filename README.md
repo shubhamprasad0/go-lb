@@ -22,7 +22,7 @@ This project implements a simple load balancer in Go. It allows distributing inc
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/shubhamprasad0/go-lb.git
+   git clone git@github.com:shubhamprasad0/go-lb.git
    cd go-lb
    ```
 
@@ -56,9 +56,9 @@ You can also configure the load balancer using a YAML file. The configuration fr
 Example `config.yaml`:
 ```yaml
 port: 8080
-buffer_size: 1024
-health_check_route: "/health"
-health_check_interval: 30
+bufferSize: 1024
+healthCheckRoute: "/health"
+healthCheckInterval: 30
 servers:
   - "server1:8080"
   - "server2:8080"
