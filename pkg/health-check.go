@@ -13,9 +13,9 @@ type HealthChecker struct {
 	HealthCheckRoute    string
 }
 
-func NewHealthChecker(addresses []string, healthCheckRoute string, healthCheckInterval uint16) *HealthChecker {
+func NewHealthChecker(servers []string, healthCheckRoute string, healthCheckInterval uint16) *HealthChecker {
 	return &HealthChecker{
-		AllServers:          addresses,
+		AllServers:          servers,
 		HealthCheckRoute:    healthCheckRoute,
 		HealthCheckInterval: healthCheckInterval,
 	}

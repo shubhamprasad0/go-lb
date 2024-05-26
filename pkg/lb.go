@@ -12,11 +12,11 @@ type LoadBalancer struct {
 	selector      *Selector
 }
 
-func NewLoadBalancer(config *LBConfig, addresses []string) *LoadBalancer {
+func NewLoadBalancer(config *LBConfig) *LoadBalancer {
 	return &LoadBalancer{
 		Config:        config,
 		selector:      NewSelector(),
-		healthChecker: NewHealthChecker(addresses, config.HealthCheckRoute, config.HealthCheckInterval),
+		healthChecker: NewHealthChecker(config.Servers, config.HealthCheckRoute, config.HealthCheckInterval),
 	}
 }
 

@@ -1,0 +1,8 @@
+address: "127.0.0.1:8080"
+bufferSize: 1024
+healthCheckInterval: 10
+healthCheckRoute: "/health"
+servers:
+- "127.0.0.1:8000"
+- "127.0.0.1:8001"
+- "127.0.0.1:8002"
