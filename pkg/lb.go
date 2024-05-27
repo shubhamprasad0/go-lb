@@ -7,12 +7,15 @@ import (
 	"net"
 )
 
+// LoadBalancer represents a load balancer that distributes incoming requests
+// to multiple application servers.
 type LoadBalancer struct {
 	Config        *LBConfig
 	healthChecker *HealthChecker
 	selector      *Selector
 }
 
+// NewLoadBalancer creates a new LoadBalancer instance with the provided configuration.
 func NewLoadBalancer(config *LBConfig) *LoadBalancer {
 	return &LoadBalancer{
 		Config:        config,
@@ -21,6 +24,8 @@ func NewLoadBalancer(config *LBConfig) *LoadBalancer {
 	}
 }
 
+// Start starts the load balancer, listening for incoming connections and
+// forwarding them to healthy application servers.
 func (s *LoadBalancer) Start() {
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Config.Port))
 	if err != nil {
@@ -39,6 +44,8 @@ func (s *LoadBalancer) Start() {
 	}
 }
 
+// handleConnection handles an incoming connection, reading the request data,
+// forwarding it to an application server, and sending the response back to the client.
 func (s *LoadBalancer) handleConnection(conn net.Conn) {
 	buf := make([]byte, s.Config.BufferSize)
 	var data []byte
@@ -72,6 +79,8 @@ func (s *LoadBalancer) handleConnection(conn net.Conn) {
 	conn.Write(res)
 }
 
+// routeRequest forwards the request data to a selected application server and
+// returns the response data.
 func (s *LoadBalancer) routeRequest(data []byte) ([]byte, error) {
 	serverAddress := s.selectServer()
 	log.Printf("Forwarding request to: %s", serverAddress)
@@ -91,9 +100,9 @@ func (s *LoadBalancer) routeRequest(data []byte) ([]byte, error) {
 		n, err := conn.Read(buf)
 		if err != nil {
 			if err == net.ErrClosed || err == io.EOF {
-				log.Printf("connection closed by the server")
+				log.Printf("Connection closed by the server")
 			} else {
-				log.Printf("got error while getting response from server: %+v", err)
+				log.Printf("Got error while getting response from server: %+v", err)
 			}
 			break
 		}
@@ -106,6 +115,8 @@ func (s *LoadBalancer) routeRequest(data []byte) ([]byte, error) {
 	return response, nil
 }
 
+// selectServer selects the next healthy application server using a round-robin
+// selection algorithm.
 func (s *LoadBalancer) selectServer() string {
 	servers := s.healthChecker.GetHealthyServers()
 	idx := s.selector.Next() % uint64(len(servers))
