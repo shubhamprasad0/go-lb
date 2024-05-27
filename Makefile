@@ -11,6 +11,7 @@ build: $(BIN_DIR)/$(APP_NAME)
 
 $(BIN_DIR)/$(APP_NAME):
 	@echo "Building the application..."
+	@go mod tidy
 	@go build -o $(BIN_DIR)/$(APP_NAME) $(CMD_DIR)/$(APP_NAME)
 	@echo "Built $(BIN_DIR)/$(APP_NAME)"
 

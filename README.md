@@ -31,6 +31,11 @@ This project implements a simple load balancer in Go. It allows distributing inc
    make
    ```
 
+3. Run unit tests:
+   ```sh
+   go test ./...
+   ```
+
 ## Usage
 
 ### Command-Line Arguments
