@@ -47,6 +47,8 @@ func (s *LoadBalancer) Start() {
 // handleConnection handles an incoming connection, reading the request data,
 // forwarding it to an application server, and sending the response back to the client.
 func (s *LoadBalancer) handleConnection(conn net.Conn) {
+	defer conn.Close()
+
 	buf := make([]byte, s.Config.BufferSize)
 	var data []byte
 
