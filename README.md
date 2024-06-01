@@ -73,33 +73,18 @@ servers:
 
 To start the load balancer, use the following command:
 
-```sh
-./bin/lb -config=config.yaml
-```
 
 ## Development
-
-### Directory Structure
-
-- `cmd/`: Contains the main package for the load balancer.
-- `pkg/`: Contains the package with the load balancer logic.
-- `bin/`: Output directory for the compiled binary.
 
 ### Building the Project
 
 Use the Makefile to build the project:
 
-```sh
-make build
-```
 
 ### Cleaning Up
 
 To clean up the build artifacts:
 
-```sh
-make clean
-```
 
 ## Contributing
 
